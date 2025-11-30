@@ -1,4 +1,4 @@
-# app.py (FINAL) - Study Scheduler (Streamlit) - Full version with persistence & improved alarm
+# app.py - Study Scheduler - Full version with persistence & improved alarm
 # Requirements: streamlit, pandas, plotly
 # Run: streamlit run app.py
 
@@ -64,6 +64,26 @@ def buat_database_mahasiswa():
                 "Rabu": ["13:00-15:00"],
                 "Kamis": ["08:00-10:00", "13:00-15:00"],
                 "Jumat": ["10:00-12:00"]
+            }
+        }, 
+        "16725494": {
+            "nama" : "Louis Sergio Fredly"
+            "jadwal_kuliah" : {
+                "Senin": ["10:00-12:00"],
+                "Selasa": ["10:00-12:00", "13:00-15:00"],
+                "Rabu": ["10:00-12:00"],
+                "Kamis": ["08:00-10:00", "15:00-17:00"],
+                "Jumat": ["13:00-15:00"]                
+            }
+        }, 
+        "16725424": {
+            "nama" : "Felicya Ribka Zafeena"
+            "jadwal_kuliah" : {
+                "Senin": ["10:00-12:00"],
+                "Selasa": ["08:00-10:00", "13:00-15:00"],
+                "Rabu": ["10:00-12:00"],
+                "Kamis": ["08:00-10:00", "15:00-17:00"],
+                "Jumat": ["13:00-15:00"]                
             }
         }
     }
@@ -208,8 +228,8 @@ def gen_id():
 # -------------------------
 # Streamlit UI
 # -------------------------
-st.set_page_config(page_title="Study Scheduler Final", layout="wide")
-st.title("Study Scheduler — Final (Streamlit)")
+st.set_page_config(page_title="Study Scheduler", layout="wide")
+st.title("Study Scheduler")
 
 # session state initialization
 if "queue" not in st.session_state: st.session_state.queue = []
@@ -223,8 +243,8 @@ menu = st.sidebar.radio("", ["Login", "Input Kegiatan", "Generate Jadwal", "Liha
 
 # --- Login ---
 if menu == "Login":
-    st.header("Login (NIM untuk cek jadwal kuliah)")
-    nim = st.text_input("Masukkan NIM demo (contoh: 16725193):", st.session_state.user_nim)
+    st.header("Login :")
+    nim = st.text_input("Masukkan NIM :", st.session_state.user_nim)
     if st.button("Login"):
         if nim in DB:
             st.session_state.user_nim = nim
@@ -343,7 +363,7 @@ elif menu == "Generate Jadwal":
                 st.success(f"Terjadwal: {newtask['mapel']} pada {newtask['date']} {newtask['start']}-{newtask['end']}")
             save_tasks(tasks)
             st.session_state.queue = []
-            st.info(f"Selesai. {added} tugas tersimpan ke {DATA_FILE}.")
+            # st.info(f"Selesai. {added} tugas tersimpan ke {DATA_FILE}.")
 
 # --- Lihat Jadwal ---
 elif menu == "Lihat Jadwal":
@@ -367,6 +387,32 @@ elif menu == "Lihat Jadwal":
             st.plotly_chart(fig, use_container_width=True)
         except Exception as e:
             st.write("Plotly error:", e)
+
+    # alarm jadwal 
+    if st.session_state.tasks:
+        js_tasks = json.dumps(st.session_state.tasks).
+
+        alarm_script = f"""
+        <script>
+        const tasks = {js_tasks};
+
+        function checkSchedule() {{
+            const now = new Date();
+            const nowStr = now.toTimeString().slice(0,5); // "HH:MM"
+
+            for (let t of tasks) {{
+                if (t.time === nowStr) {{
+                    alert("⏰ Waktunya belajar: " + mapel);
+            }}
+        }}
+    }}
+
+    // cek setiap 30 detik
+    setInterval(checkSchedule, 30000);
+    </script>
+    """
+
+    st.components.v1.html(alarm_script, height=0)
 
 # --- Edit / Hapus ---
 elif menu == "Edit / Hapus":
@@ -518,6 +564,7 @@ elif menu == "Timer":
                 const intervalId = setInterval(() => {{
                     if (sec <= 0) {{
                         clearInterval(intervalId);
+                        playAlarm();
                         alarm.loop = true;
                         alarm.play().catch(() => {{}});
                         return setTimeout(() => {{
@@ -543,6 +590,27 @@ elif menu == "Timer":
             }};
 
             runPhase();
+            </script>
+            """
+            # alarm
+            alarm_block = f"""
+            <audio id='alarm' src='{ALARM_URL}' preload='auto'></audio>
+            <button id='stopAlarmBtn'>Stop Alarm</button>
+
+            <script>
+            const alarmEl = document.getElementById("alarm");
+            alarmEl.volume = 1.0;
+
+            function playAlarm() {{
+                alarmEl.loop = true;
+                alarmEl.play().catch(() => {{}});
+            }}
+
+            document.getElementById("stopAlarmBtn").onclick = () => {{
+                alarmEl.pause();
+                alarmEl.currentTime = 0;
+                alarmEl.loop = false;
+            }};
             </script>
             """
 
