@@ -1,25 +1,18 @@
-# app.py - Study Scheduler - Full version with persistence & improved alarm
-# Requirements: streamlit, pandas, plotly
-# Run: streamlit run app.py
-
 import streamlit as st
 import pandas as pd
 import json, os, uuid
 from datetime import date, datetime as dt, timedelta
 
-# -------------------------
-# Config / files
-# -------------------------
-DATA_FILE = "tasks.json"   # stores tasks list
-USERS_FILE = "users.json"  # optional extra user storage (not necessary)
-ALARM_URL = "https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"  # louder alarm sound
 
-# default scheduling window (in minutes from midnight)
+DATA_FILE = "tasks.json"   
+USERS_FILE = "users.json"  
+ALARM_URL = "https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" 
+
 DEFAULT_NIGHT_START = 19 * 60
-DEFAULT_NIGHT_END = 22 * 60
+DEFAULT_NIGHT_END = 24 * 60
 MAX_DAYS_AHEAD_DEFAULT = 60
 
-# create file if missing
+
 def ensure_files_exist():
     if not os.path.exists(DATA_FILE):
         with open(DATA_FILE, "w", encoding="utf-8") as f:
@@ -65,27 +58,27 @@ def buat_database_mahasiswa():
                 "Kamis": ["08:00-10:00", "13:00-15:00"],
                 "Jumat": ["10:00-12:00"]
             }
-        }, 
+        },
         "16725494": {
-            "nama" : "Louis Sergio Fredly"
-            "jadwal_kuliah" : {
-                "Senin": ["10:00-12:00"],
-                "Selasa": ["10:00-12:00", "13:00-15:00"],
-                "Rabu": ["10:00-12:00"],
-                "Kamis": ["08:00-10:00", "15:00-17:00"],
-                "Jumat": ["13:00-15:00"]                
+            "nama": "Louis Sergio Fredly",
+            "jadwal_kuliah": {
+                "Senin": ["08:00-10:00", "13:00-15:00"],
+                "Selasa": ["10:00-12:00"],
+                "Rabu": ["08:00-10:00", "15:00-17:00"],
+                "Kamis": ["13:00-15:00"],
+                "Jumat": ["10:00-12:00"]
             }
-        }, 
+        },
         "16725424": {
-            "nama" : "Felicya Ribka Zafeena"
-            "jadwal_kuliah" : {
-                "Senin": ["10:00-12:00"],
-                "Selasa": ["08:00-10:00", "13:00-15:00"],
-                "Rabu": ["10:00-12:00"],
-                "Kamis": ["08:00-10:00", "15:00-17:00"],
-                "Jumat": ["13:00-15:00"]                
+            "nama": "Felicya Ribka Zafeena",
+            "jadwal_kuliah": {
+                "Senin": ["08:00-10:00", "13:00-15:00"],
+                "Selasa": ["10:00-12:00"],
+                "Rabu": ["08:00-10:00", "15:00-17:00"],
+                "Kamis": ["13:00-15:00"],
+                "Jumat": ["10:00-12:00"]
             }
-        }
+        },
     }
 
 DB = buat_database_mahasiswa()
@@ -390,7 +383,7 @@ elif menu == "Lihat Jadwal":
 
     # alarm jadwal 
     if st.session_state.tasks:
-        js_tasks = json.dumps(st.session_state.tasks).
+        js_tasks = json.dumps(st.session_state.tasks)
 
         alarm_script = f"""
         <script>
