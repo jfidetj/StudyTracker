@@ -232,7 +232,7 @@ if "user_name" not in st.session_state: st.session_state.user_name = ""
 
 # Sidebar
 st.sidebar.title("Menu")
-menu = st.sidebar.radio("", ["Login", "Input Kegiatan", "Generate Jadwal", "Lihat Jadwal", "Edit / Hapus", "Timer", "Export", "About"])
+menu = st.sidebar.radio("", ["Login", "Input Kegiatan", "Generate Jadwal", "Lihat Jadwal", "Edit / Hapus", "Timer", "Export"])
 
 # --- Login ---
 if menu == "Login":
@@ -250,7 +250,7 @@ if menu == "Login":
 
 # --- Input Kegiatan ---
 elif menu == "Input Kegiatan":
-    st.header("Input Kegiatan (Lengkap)")
+    st.header("Input Kegiatan")
     col1, col2 = st.columns([2,1])
     with col1:
         mapel = st.text_input("Nama tugas / mata pelajaran")
@@ -312,7 +312,7 @@ elif menu == "Input Kegiatan":
 
 # --- Generate Jadwal ---
 elif menu == "Generate Jadwal":
-    st.header("Generate Jadwal & Simpan (menggunakan bobot & deadline)")
+    st.header("Generate Jadwal")
     if not st.session_state.queue:
         st.info("Queue kosong.")
     else:
@@ -409,7 +409,7 @@ elif menu == "Lihat Jadwal":
 
 # --- Edit / Hapus ---
 elif menu == "Edit / Hapus":
-    st.header("Edit / Hapus Tugas (Reassign fixed)")
+    st.header("Edit / Hapus Tugas")
     tasks = load_tasks()
     if not tasks:
         st.info("Belum ada tugas.")
@@ -471,7 +471,7 @@ elif menu == "Edit / Hapus":
 
 # --- Timer (with louder looping alarm + safe JS formatting) ---
 elif menu == "Timer":
-    st.header("Timer dengan alarm looping (lebih keras)")
+    st.header("Timer")
     st.write("Klik tombol untuk memulai agar browser mengizinkan audio autoplay. Ada tombol STOP untuk menghentikan loop alarm.")
 
     col1, col2 = st.columns(2)
@@ -619,16 +619,5 @@ elif menu == "Export":
         df = pd.DataFrame(tasks).sort_values(["date","start"])
         st.download_button("Download CSV", df.to_csv(index=False), file_name="tasks_export.csv", mime="text/csv")
         st.download_button("Download JSON", json.dumps(tasks, ensure_ascii=False, indent=2), file_name="tasks_export.json", mime="application/json")
-
-# --- About ---
-elif menu == "About":
-    st.header("Tentang")
-    st.markdown("""
-    Versi final Streamlit (persistence + improved alarm).\n
-    - Data tasks disimpan di tasks.json di folder yang sama.\n
-    - Alarm menggunakan HTML audio loop dengan volume 1.0 (lebih keras) dan tombol STOP.\n
-    - Jika ingin suara lokal custom, taruh file audio di folder static/public dan ganti ALARM_URL.\n
-    - Jika ada bug atau fitur tambahan (Google Calendar export, notifikasi desktop), kabari aja.
-    """)
 
 # ensure session-state tasks in memory sync with file
