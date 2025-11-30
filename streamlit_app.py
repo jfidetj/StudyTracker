@@ -360,7 +360,7 @@ elif menu == "Generate Jadwal":
 
 # --- Lihat Jadwal ---
 elif menu == "Lihat Jadwal":
-    st.header("Lihat Jadwal (persisted)")
+    st.header("Lihat Jadwal")
     tasks = load_tasks()
     if not tasks:
         st.info("Belum ada tugas tersimpan.")
