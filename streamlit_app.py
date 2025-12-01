@@ -405,7 +405,7 @@ elif menu == "Lihat Jadwal":
     </script>
     """
 
-    st.components.v1.html(alarm_script, height=0)
+    # st.components.v1.html(alarm_script, height=0)
 
 # --- Edit / Hapus ---
 elif menu == "Edit / Hapus":
