@@ -318,8 +318,8 @@ elif menu == "Generate Jadwal":
     else:
         dfq = pd.DataFrame(st.session_state.queue)
         st.dataframe(dfq[["mapel","requested_date","duration_minutes","user_nim","bobot","deadline"]])
-        night_start_h = st.number_input("Jam mulai malam (jam 24h)", value=19)
-        night_end_h = st.number_input("Jam akhir malam (jam 24h)", value=23)
+        night_start_h = st.number_input("Jam mulai malam (jam 24h)", min_value=0, max_value=24, value=19)
+        night_end_h = st.number_input("Jam akhir malam (jam 24h)", min_value=0, max_value=24, value=23)
         max_days = st.number_input("Maks hari pencarian slot (hari)", min_value=7, max_value=365, value=MAX_DAYS_AHEAD_DEFAULT)
         if st.button("Generate & Simpan"):
             tasks = load_tasks()
