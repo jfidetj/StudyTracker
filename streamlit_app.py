@@ -356,7 +356,7 @@ elif menu == "Generate Jadwal":
                 st.success(f"Terjadwal: {newtask['mapel']} pada {newtask['date']} {newtask['start']}-{newtask['end']}")
             save_tasks(tasks)
             st.session_state.queue = []
-            # st.info(f"Selesai. {added} tugas tersimpan ke {DATA_FILE}.")
+            st.info(f"Selesai. {added} tugas tersimpan ke {DATA_FILE}.")
 
 # --- Lihat Jadwal ---
 elif menu == "Lihat Jadwal":
